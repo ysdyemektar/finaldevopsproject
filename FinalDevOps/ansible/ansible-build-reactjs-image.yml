@@ -1,0 +1,22 @@
+- name: build docker image and push it to dockr hub
+  hosts: localhost
+  become: yes 
+  become_user: yasa
+  
+
+  tasks:
+  - name: build image
+    command: docker build -t reactjs-pipeline .
+    args:
+       chdir: /home/yasa/devops/nginx
+
+  - name: tag the image
+    command: docker tag reactjs-pipeline yasadocker/reactjs-pipeline:latest
+
+
+  - name: push the built image to dockerhub
+    command: docker push yasadocker/reactjs-pipeline:latest
+
+
+  - name: delete the built image and the taged one
+    command: docker rmi reactjs-pipeline yasadocker/reactjs-pipeline:latest
